@@ -22,6 +22,7 @@ const routes = [
 export default {
   data() {
     return {
+      timer: 0,
       currentView: {},
       notFound: "Not found",
       circle: ["/red", "/yellow", "/green"],
@@ -33,7 +34,9 @@ export default {
     Yellow,
     Green,
   },
-  mounted() {},
+  mounted() {
+    this.startTime();
+  },
   created() {
     // If wrong url address
     if (this.getRouteObject() === undefined) {
@@ -55,7 +58,8 @@ export default {
     });
   },
   destroyed() {
-    this.firstStart = true;
+    this.stopTime();
+    // this.firstStart = true;
   },
   methods: {
     getRouteObject() {
@@ -66,15 +70,37 @@ export default {
       window.history.pushState(null, null, next);
       Bus.$emit("navigate");
     },
+    stopTime() {
+      clearInterval(this.timer);
+    },
+    startTime() {
+      this.timer = setInterval(() => {
+        this.curTime--;
+      }, 1000);
+    },
   },
+
   watch: {
     currentView() {
       if (this.currentView.name === "Red") {
         this.currentView.isActive = true;
       }
     },
+    curTime(time) {
+      if (time <= 0) this.stopTime();
+    },
   },
-  computed: {},
+  computed: {
+    time() {
+      return 1 + 1;
+    },
+    computedColor() {
+      if (this.currentView === "Red") {
+        let className;
+        return (className = "active");
+      }
+    },
+  },
 };
 </script>
 

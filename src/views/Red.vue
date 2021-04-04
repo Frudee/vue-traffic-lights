@@ -32,7 +32,7 @@ module.exports = {
     this.stopTime();
   },
   created() {
-    if (localStorage.getItem("savedTime") === null) {
+    if (localStorage.getItem("savedTime") === "null") {
       localStorage.removeItem("savedTime");
     }
     window.addEventListener("beforeunload", this.handler);
@@ -69,10 +69,7 @@ module.exports = {
     },
     // Get saved time
     getTime() {
-      if (localStorage.getItem("savedTime") === "null") {
-        this.curTime = 10;
-      }
-      if (Number(localStorage.getItem("savedTime")) > 10) {
+      if (localStorage.getItem("savedTime") == null) {
         this.curTime = 10;
       } else {
         this.curTime = Number(localStorage.getItem("savedTime"));

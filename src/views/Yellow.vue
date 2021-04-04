@@ -38,13 +38,10 @@ module.exports = {
     getTime() {
       if (localStorage.getItem("savedTime") === "null") {
         this.curTime = 3;
+        localStorage.removeItem("savedTime");
       }
       if (localStorage.getItem("savedTime")) {
-        if (Number(localStorage.getItem("savedTime")) > 3) {
-          this.curTime = 3;
-        } else {
-          this.curTime = Number(localStorage.getItem("savedTime"));
-        }
+        this.curTime = Number(localStorage.getItem("savedTime"));
       }
     },
     startTime() {
