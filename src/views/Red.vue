@@ -30,13 +30,17 @@ module.exports = {
   },
   destroyed() {
     this.stopTime();
+    localStorage.removeItem("savedTimeRed");
   },
   created() {
-    if (localStorage.getItem("savedTime") === "null") {
-      localStorage.removeItem("savedTime");
+    localStorage.removeItem("savedTimeYellow");
+    localStorage.removeItem("savedTimeGreen");
+
+    if (localStorage.getItem("savedTimeRed") == "null" || "") {
+      localStorage.removeItem("savedTimeRed");
     }
-    window.addEventListener("beforeunload", this.handler);
     this.getTime();
+    window.addEventListener("beforeunload", this.handler);
   },
   methods: {
     // Start timer
@@ -52,7 +56,9 @@ module.exports = {
           this.$parent.firstStart = false;
         }
         if (this.curTime === 0) {
-          localStorage.removeItem("savedTime");
+          localStorage.removeItem("savedTimeRed");
+          localStorage.removeItem("savedTimeGreen");
+          localStorage.removeItem("savedTimeYellow");
         }
       }, 1000);
     },
@@ -64,15 +70,21 @@ module.exports = {
     },
     // Save time and order
     handler() {
-      localStorage.setItem("savedTime", JSON.stringify(this.curTime));
+      localStorage.setItem("savedTimeRed", JSON.stringify(this.curTime));
       localStorage.setItem("order", JSON.stringify(this.$parent.circle));
     },
     // Get saved time
     getTime() {
-      if (localStorage.getItem("savedTime") == null) {
-        this.curTime = 10;
+      if (
+        Number(localStorage.savedTimeRed) >= 0 &&
+        Number(localStorage.savedTimeRed) <= 10
+      ) {
+        if (localStorage.getItem("savedTimeRed")) {
+          this.curTime = Number(localStorage.getItem("savedTimeRed"));
+        }
       } else {
-        this.curTime = Number(localStorage.getItem("savedTime"));
+        this.curTime = 10;
+        localStorage.removeItem("savedTimeRed");
       }
     },
   },

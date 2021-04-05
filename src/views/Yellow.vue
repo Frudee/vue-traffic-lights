@@ -25,30 +25,39 @@ module.exports = {
   },
   destroyed() {
     this.stopTime();
+    localStorage.removeItem("savedTimeRed");
+    localStorage.removeItem("savedTimeYellow");
   },
   created() {
+    localStorage.removeItem("savedTimeRed");
+    localStorage.removeItem("savedTimeGreen");
     this.getTime();
     window.addEventListener("beforeunload", this.handler);
   },
   methods: {
     handler() {
-      localStorage.setItem("savedTime", JSON.stringify(this.curTime));
+      localStorage.setItem("savedTimeYellow", JSON.stringify(this.curTime));
       localStorage.setItem("order", JSON.stringify(this.$parent.circle));
     },
     getTime() {
-      if (localStorage.getItem("savedTime") === "null") {
+      if (
+        Number(localStorage.savedTimeYellow) >= 0 &&
+        Number(localStorage.savedTimeYellow) <= 3
+      ) {
+        if (localStorage.getItem("savedTimeYellow")) {
+          this.curTime = Number(localStorage.getItem("savedTimeYellow"));
+        }
+      } else {
         this.curTime = 3;
-        localStorage.removeItem("savedTime");
-      }
-      if (localStorage.getItem("savedTime")) {
-        this.curTime = Number(localStorage.getItem("savedTime"));
       }
     },
     startTime() {
       this.timer = setInterval(() => {
         this.curTime--;
         if (this.curTime === 0) {
-          localStorage.removeItem("savedTime");
+          localStorage.removeItem("savedTimeYellow");
+          localStorage.removeItem("savedTimeRed");
+          localStorage.removeItem("savedTimeGreen");
         }
       }, 1000);
     },

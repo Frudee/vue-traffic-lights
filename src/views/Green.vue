@@ -25,23 +25,30 @@ module.exports = {
   },
   destroyed() {
     this.stopTime();
+    localStorage.removeItem("savedTimeRed");
   },
   created() {
+    localStorage.removeItem("savedTimeRed");
+    localStorage.removeItem("savedTimeYellow");
     this.getTime();
     window.addEventListener("beforeunload", this.handler);
   },
   methods: {
     handler() {
-      localStorage.setItem("savedTime", JSON.stringify(this.curTime));
+      localStorage.setItem("savedTimeGreen", JSON.stringify(this.curTime));
       localStorage.setItem("order", JSON.stringify(this.$parent.circle));
     },
     getTime() {
-      if (localStorage.getItem("savedTime") === "null") {
+      if (
+        Number(localStorage.savedTimeGreen) >= 0 &&
+        Number(localStorage.savedTimeGreen) <= 15
+      ) {
+        console.log("green");
+        if (localStorage.getItem("savedTimeGreen")) {
+          this.curTime = Number(localStorage.getItem("savedTimeGreen"));
+        }
+      } else {
         this.curTime = 15;
-        localStorage.removeItem("savedTime");
-      }
-      if (localStorage.getItem("savedTime")) {
-        this.curTime = Number(localStorage.getItem("savedTime"));
       }
     },
     startTime() {
@@ -51,7 +58,8 @@ module.exports = {
           this.flash = !this.flash;
         }
         if (this.curTime === 0) {
-          localStorage.removeItem("savedTime");
+          localStorage.removeItem("savedTimeGreen");
+          localStorage.removeItem("savedTimeYellow");
           this.$parent.circle.reverse();
         }
       }, 1000);
@@ -74,7 +82,7 @@ module.exports = {
 .main {
   height: 50px;
   width: 50px;
-  background-color: green;
+  background-color: #39ff14;
   margin: auto;
 }
 .dark {
