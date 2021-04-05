@@ -54,7 +54,7 @@ module.exports = {
     startTime() {
       this.timer = setInterval(() => {
         this.curTime--;
-        if (this.curTime <= 4) {
+        if (this.curTime <= 3) {
           this.flash = !this.flash;
         }
         if (this.curTime === 0) {
